@@ -1,0 +1,7 @@
+{
+  "name": "Aquarius Tattoo Studio",
+  "description": "A high-end 3D tattoo studio experience featuring a procedural ink planet, AR try-on, and a dynamic price engine.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
