@@ -15,12 +15,12 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       const total = document.documentElement.scrollHeight - window.innerHeight;
-      if (total === 0) return;
+      if (total <= 0) return;
       const scrollPos = window.scrollY / total;
       setScrolled(scrollPos);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -38,20 +38,23 @@ const App: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             {/* Hero Section with 3D Planet */}
-            <section className="relative h-[300vh]">
+            <section className="relative h-[400vh] lg:h-[300vh]">
               <div className="sticky top-0 h-screen w-full overflow-hidden">
-                <Experience progress={scrolled} />
+                {/* 3D background wrapper - ensure it doesn't swallow vertical scroll */}
+                <div className="absolute inset-0 pointer-events-auto">
+                   <Experience progress={scrolled} />
+                </div>
                 
                 {/* Hero Overlay Text */}
                 <div 
-                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center"
-                  style={{ opacity: 1 - scrolled * 4 }}
+                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center z-10"
+                  style={{ opacity: 1 - scrolled * 5 }}
                 >
                   <motion.h1 
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 1 }}
-                    className="text-4xl md:text-7xl lg:text-8xl font-bold mb-4"
+                    className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 drop-shadow-2xl"
                   >
                     Aquarius
                   </motion.h1>
@@ -59,7 +62,7 @@ const App: React.FC = () => {
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.8, duration: 1 }}
-                    className="text-cyan-400 text-sm md:text-lg tracking-[0.5em] uppercase"
+                    className="text-cyan-400 text-xs md:text-lg tracking-[0.5em] uppercase font-semibold"
                   >
                     Jayanagar's Cosmic Ink Protocol
                   </motion.p>
@@ -69,18 +72,22 @@ const App: React.FC = () => {
                     transition={{ delay: 1.5 }}
                     className="absolute bottom-12 flex flex-col items-center gap-2"
                   >
-                    <span className="text-[10px] uppercase tracking-widest text-zinc-500">Scroll to Enter</span>
+                    <span className="text-[10px] uppercase tracking-widest text-zinc-400 animate-pulse">Scroll to Enter</span>
                     <div className="w-px h-12 bg-gradient-to-b from-cyan-400 to-transparent"></div>
                   </motion.div>
                 </div>
 
-                {/* Second Phase Overlay */}
+                {/* Second Phase Overlay - Information reveals as you scroll */}
                 <div 
-                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center"
-                  style={{ opacity: (scrolled - 0.25) * 4, visibility: scrolled > 0.25 ? 'visible' : 'hidden' }}
+                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center z-10"
+                  style={{ 
+                    opacity: Math.max(0, (scrolled - 0.15) * 4), 
+                    visibility: scrolled > 0.15 ? 'visible' : 'hidden',
+                    transform: `translateY(${(1 - scrolled) * 20}px)`
+                  }}
                 >
                   <h2 className="text-3xl md:text-5xl font-bold mb-6">Our Signature Works</h2>
-                  <p className="max-w-xl text-zinc-400 text-sm md:text-base">
+                  <p className="max-w-xl text-zinc-300 text-sm md:text-base leading-relaxed bg-black/20 backdrop-blur-sm p-4 rounded-xl border border-white/5">
                     From deep obsidian blacks to glowing cyan details, our artistry transcends the ordinary. 
                     Welcome to the Aquarius World.
                   </p>
@@ -89,11 +96,13 @@ const App: React.FC = () => {
             </section>
 
             {/* Gallery Section */}
-            <Gallery />
+            <div className="relative z-20 bg-[#050505]">
+              <Gallery />
+            </div>
 
             {/* CTA Section */}
-            <section className="py-32 px-6 flex flex-col items-center justify-center text-center bg-zinc-950">
-              <h2 className="text-4xl md:text-6xl font-bold mb-8">Ready for your skin's transformation?</h2>
+            <section className="relative z-20 py-32 px-6 flex flex-col items-center justify-center text-center bg-zinc-950 border-t border-white/5">
+              <h2 className="text-4xl md:text-6xl font-bold mb-12 max-w-4xl">Ready for your skin's transformation?</h2>
               <div className="flex flex-col sm:flex-row gap-6">
                 <button 
                   onClick={() => setActiveView('ar')}
@@ -118,6 +127,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200]"
           >
             <ARTryOn onClose={() => setActiveView('home')} />
           </motion.div>
@@ -129,6 +139,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200]"
           >
             <PriceEngine onClose={() => setActiveView('home')} />
           </motion.div>

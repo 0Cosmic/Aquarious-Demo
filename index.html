@@ -1,21 +1,26 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Aquarius Tattoo Studio | Bengaluru</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600&display=swap');
       
+      :root {
+        --accent: #00e5ff;
+      }
+
       body {
         margin: 0;
         background-color: #050505;
         color: #fff;
         font-family: 'Inter', sans-serif;
         overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
       }
 
       h1, h2, h3, .syncopate {
@@ -31,7 +36,7 @@
         background: #000;
       }
       ::-webkit-scrollbar-thumb {
-        background: #00e5ff;
+        background: var(--accent);
         border-radius: 10px;
       }
 
@@ -39,8 +44,9 @@
         background: linear-gradient(135deg, #000000 0%, #001a1a 100%);
       }
 
+      /* CRITICAL: Allow vertical panning on canvas for mobile scrolling */
       canvas {
-        touch-action: none;
+        touch-action: pan-y !important;
       }
 
       /* Enhanced Range Input for Mobile */
@@ -54,7 +60,7 @@
         height: 28px;
         width: 28px;
         border-radius: 50%;
-        background: #00e5ff;
+        background: var(--accent);
         cursor: pointer;
         margin-top: -12px;
         box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
@@ -65,7 +71,7 @@
         height: 28px;
         width: 28px;
         border-radius: 50%;
-        background: #00e5ff;
+        background: var(--accent);
         cursor: pointer;
         border: 2px solid white;
         box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
