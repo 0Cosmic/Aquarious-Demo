@@ -3,8 +3,8 @@ import React, { Suspense, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera, Environment, Float, Stars } from '@react-three/drei';
 import * as THREE from 'three';
-import { Planet } from './Planet';
-import { Ring } from './Ring';
+import { Planet } from './Planet.tsx';
+import { Ring } from './Ring.tsx';
 
 interface ExperienceProps {
   progress: number;
@@ -18,7 +18,6 @@ const SceneContent: React.FC<ExperienceProps> = ({ progress }) => {
     if (!cameraRef.current) return;
 
     // Camera dive effect based on progress
-    // 0 -> start, 1 -> deep dive
     const zPos = 8 - progress * 10;
     const yPos = 0 - progress * 2;
     const fov = 45 + progress * 80;
@@ -28,7 +27,6 @@ const SceneContent: React.FC<ExperienceProps> = ({ progress }) => {
     cameraRef.current.fov = THREE.MathUtils.lerp(cameraRef.current.fov, fov, 0.1);
     cameraRef.current.updateProjectionMatrix();
 
-    // Subtle rotation of the whole world
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.002;
     }

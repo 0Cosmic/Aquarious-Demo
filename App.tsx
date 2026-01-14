@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Experience } from './components/Experience';
-import { PriceEngine } from './components/PriceEngine';
-import { ARTryOn } from './components/ARTryOn';
-import { Gallery } from './components/Gallery';
-import { Navbar } from './components/Navbar';
-import { Footer } from './components/Footer';
+import { Experience } from './components/Experience.tsx';
+import { PriceEngine } from './components/PriceEngine.tsx';
+import { ARTryOn } from './components/ARTryOn.tsx';
+import { Gallery } from './components/Gallery.tsx';
+import { Navbar } from './components/Navbar.tsx';
+import { Footer } from './components/Footer.tsx';
 
 const App: React.FC = () => {
   const [activeView, setActiveView] = useState<'home' | 'ar' | 'price'>('home');
@@ -14,7 +14,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPos = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total === 0) return;
+      const scrollPos = window.scrollY / total;
       setScrolled(scrollPos);
     };
 
